@@ -1,6 +1,7 @@
 module com.tugalsan.api.sql.tbl {
     requires java.sql;
     requires com.tugalsan.api.list;
+    requires com.tugalsan.api.unsafe;
     requires com.tugalsan.api.executable;
     requires com.tugalsan.api.log;
     requires com.tugalsan.api.pack;

@@ -1,7 +1,6 @@
 package com.tugalsan.api.sql.tbl.server;
 
 import java.util.*;
-import java.sql.*;
 import com.tugalsan.api.list.client.*;
 import com.tugalsan.api.log.server.*;
 import com.tugalsan.api.pack.client.*;
@@ -11,6 +10,7 @@ import com.tugalsan.api.sql.conn.server.*;
 import com.tugalsan.api.sql.sanitize.server.*;
 import com.tugalsan.api.sql.select.server.*;
 import com.tugalsan.api.sql.update.server.*;
+import com.tugalsan.api.unsafe.client.*;
 
 public class TS_SQLTblUtils {
 
@@ -98,12 +98,10 @@ public class TS_SQLTblUtils {
         TGS_Pack1<Long> pack = new TGS_Pack1();
         var sql = TGS_StringUtils.concat("SELECT COUNT(*) FROM information_schema.tables WHERE table_name = ? AND TABLE_SCHEMA = ? LIMIT 1");
         TS_SQLSelectStmtUtils.select(anchor, sql, ps -> {
-            try {
+            TGS_UnSafe.execute(() -> {
                 ps.setString(1, tableName.toString());
                 ps.setString(2, dbName);
-            } catch (SQLException ex) {
-                throw new RuntimeException();
-            }
+            });
         }, rs -> pack.value0 = rs.lng.get(0, 0));
         return pack.value0 != 0L;
     }
