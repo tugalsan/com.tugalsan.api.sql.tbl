@@ -41,7 +41,7 @@ public class TS_SQLTblUtils {
     public static int removeIndex(TS_SQLConnAnchor anchor, CharSequence tableName, CharSequence indexName) {
         d.ci("removeIndex", tableName, indexName);
         if (Objects.equals(indexName, "PRIMARY")) {
-            d.ce("addIndex", "cannot remove index", indexName);
+            d.ci("addIndex", "cannot remove index", indexName);
             return 0;
         }
         var sql = "DROP INDEX " + indexName + " ON " + tableName;
