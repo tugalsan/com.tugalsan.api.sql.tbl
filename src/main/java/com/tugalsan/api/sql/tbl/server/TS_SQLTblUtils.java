@@ -14,7 +14,7 @@ import com.tugalsan.api.unsafe.client.*;
 
 public class TS_SQLTblUtils {
 
-    final private static TS_Log d = TS_Log.of(TS_SQLTblUtils.class.getSimpleName());
+    final private static TS_Log d = TS_Log.of(TS_SQLTblUtils.class);
 
     public static void setIndexes(TS_SQLConnAnchor anchor, String tn, List<String> searchableColNames) {
         var curIndexes = getIndexes(anchor, tn);
