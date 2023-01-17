@@ -38,11 +38,11 @@ public class TS_SQLTblUtils {
         TGS_ListUtils.of(indexNames).forEach(nm -> removeIndex(anchor, tableName, nm));
     }
 
-    public static int removeIndex(TS_SQLConnAnchor anchor, CharSequence tableName, CharSequence indexName) {
+    public static TS_SQLConnStmtUpdateResult removeIndex(TS_SQLConnAnchor anchor, CharSequence tableName, CharSequence indexName) {
         d.ci("removeIndex", tableName, indexName);
         if (Objects.equals(indexName, "PRIMARY")) {
             d.ci("addIndex", "cannot remove index", indexName);
-            return 0;
+            return TS_SQLConnStmtUpdateResult.of(0, null);
         }
         var sql = "DROP INDEX " + indexName + " ON " + tableName;
         return TS_SQLUpdateStmtUtils.update(anchor, sql);
@@ -79,7 +79,7 @@ public class TS_SQLTblUtils {
         TS_SQLSanitizeUtils.sanitize(oldTableName);
         TS_SQLSanitizeUtils.sanitize(newTableName);
         var sql = TGS_StringUtils.concat("ALTER TABLE ", oldTableName, " RENAME TO ", newTableName);
-        return TS_SQLUpdateStmtUtils.update(anchor, sql) == 1;
+        return TS_SQLUpdateStmtUtils.update(anchor, sql).affectedRowCount == 1;
     }
 
     public static List<String> names(TS_SQLConnAnchor anchor) {
