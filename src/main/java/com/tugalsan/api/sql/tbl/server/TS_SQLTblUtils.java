@@ -98,7 +98,7 @@ public class TS_SQLTblUtils {
         TGS_Pack1<Long> pack = new TGS_Pack1();
         var sql = TGS_StringUtils.concat("SELECT COUNT(*) FROM information_schema.tables WHERE table_name = ? AND TABLE_SCHEMA = ? LIMIT 1");
         TS_SQLSelectStmtUtils.select(anchor, sql, ps -> {
-            TGS_UnSafe.execute(() -> {
+            TGS_UnSafe.run(() -> {
                 ps.setString(1, tableName.toString());
                 ps.setString(2, dbName);
             });
