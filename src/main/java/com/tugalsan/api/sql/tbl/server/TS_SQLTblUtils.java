@@ -3,7 +3,7 @@ package com.tugalsan.api.sql.tbl.server;
 import java.util.*;
 import com.tugalsan.api.list.client.*;
 import com.tugalsan.api.log.server.*;
-import com.tugalsan.api.pack.client.*;
+import com.tugalsan.api.tuple.client.*;
 import com.tugalsan.api.string.client.*;
 import com.tugalsan.api.sql.col.typed.client.*;
 import com.tugalsan.api.sql.conn.server.*;
@@ -85,7 +85,7 @@ public class TS_SQLTblUtils {
     public static List<String> names(TS_SQLConnAnchor anchor) {
         var dbName = anchor.config.dbName;
         TS_SQLSanitizeUtils.sanitize(dbName);
-        TGS_Pack1<List<String>> pack = new TGS_Pack1();
+        TGS_Tuple1<List<String>> pack = new TGS_Tuple1();
         var sql = TGS_StringUtils.concat("SELECT TABLE_NAME FROM information_schema.tables WHERE table_type='BASE TABLE' AND table_schema='", dbName, "' ORDER BY table_schema");
         TS_SQLSelectStmtUtils.select(anchor, sql, rs -> pack.value0 = rs.strArr.get("TABLE_NAME"));
         return pack.value0;
@@ -95,7 +95,7 @@ public class TS_SQLTblUtils {
         var dbName = anchor.config.dbName;
         TS_SQLSanitizeUtils.sanitize(dbName);
         TS_SQLSanitizeUtils.sanitize(tableName);
-        TGS_Pack1<Long> pack = new TGS_Pack1();
+        TGS_Tuple1<Long> pack = new TGS_Tuple1();
         var sql = TGS_StringUtils.concat("SELECT COUNT(*) FROM information_schema.tables WHERE table_name = ? AND TABLE_SCHEMA = ? LIMIT 1");
         TS_SQLSelectStmtUtils.select(anchor, sql, ps -> {
             TGS_UnSafe.run(() -> {
