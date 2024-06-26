@@ -71,14 +71,14 @@ public class TS_SQLTblUtils {
             d.ce("addIndex", "index already exists", idxColName);
             return;
         }
-        var sql = TGS_StringUtils.concat("ALTER TABLE ", tableName, " ADD INDEX(", idxColName, ")");
+        var sql = TGS_StringUtils.cmn().concat("ALTER TABLE ", tableName, " ADD INDEX(", idxColName, ")");
         TS_SQLUpdateStmtUtils.update(anchor, sql);
     }
 
     public static boolean rename(TS_SQLConnAnchor anchor, CharSequence oldTableName, CharSequence newTableName) {
         TS_SQLSanitizeUtils.sanitize(oldTableName);
         TS_SQLSanitizeUtils.sanitize(newTableName);
-        var sql = TGS_StringUtils.concat("ALTER TABLE ", oldTableName, " RENAME TO ", newTableName);
+        var sql = TGS_StringUtils.cmn().concat("ALTER TABLE ", oldTableName, " RENAME TO ", newTableName);
         return TS_SQLUpdateStmtUtils.update(anchor, sql).affectedRowCount == 1;
     }
 
@@ -86,7 +86,7 @@ public class TS_SQLTblUtils {
         var dbName = anchor.config.dbName;
         TS_SQLSanitizeUtils.sanitize(dbName);
         TGS_Tuple1<List<String>> pack = new TGS_Tuple1();
-        var sql = TGS_StringUtils.concat("SELECT TABLE_NAME FROM information_schema.tables WHERE table_type='BASE TABLE' AND table_schema='", dbName, "' ORDER BY table_schema");
+        var sql = TGS_StringUtils.cmn().concat("SELECT TABLE_NAME FROM information_schema.tables WHERE table_type='BASE TABLE' AND table_schema='", dbName, "' ORDER BY table_schema");
         TS_SQLSelectStmtUtils.select(anchor, sql, rs -> pack.value0 = rs.strArr.get("TABLE_NAME"));
         return pack.value0;
     }
@@ -96,7 +96,7 @@ public class TS_SQLTblUtils {
         TS_SQLSanitizeUtils.sanitize(dbName);
         TS_SQLSanitizeUtils.sanitize(tableName);
         TGS_Tuple1<Long> pack = new TGS_Tuple1();
-        var sql = TGS_StringUtils.concat("SELECT COUNT(*) FROM information_schema.tables WHERE table_name = ? AND TABLE_SCHEMA = ? LIMIT 1");
+        var sql = TGS_StringUtils.cmn().concat("SELECT COUNT(*) FROM information_schema.tables WHERE table_name = ? AND TABLE_SCHEMA = ? LIMIT 1");
         TS_SQLSelectStmtUtils.select(anchor, sql, ps -> {
             TGS_UnSafe.run(() -> {
                 ps.setString(1, tableName.toString());
@@ -117,14 +117,14 @@ public class TS_SQLTblUtils {
             columnsList.append(", ");
         });
         var columnNameId = columns.get(0).toString();
-        var sql = TGS_StringUtils.concat("CREATE TABLE IF NOT EXISTS ", tableName, " (", columnsList.toString(), " PRIMARY KEY (", columnNameId, ")) ENGINE=", (onMemory ? "MEMORY" : "InnoDB"), " DEFAULT CHARSET=utf8mb4;");
+        var sql = TGS_StringUtils.cmn().concat("CREATE TABLE IF NOT EXISTS ", tableName, " (", columnsList.toString(), " PRIMARY KEY (", columnNameId, ")) ENGINE=", (onMemory ? "MEMORY" : "InnoDB"), " DEFAULT CHARSET=utf8mb4;");
         TS_SQLUpdateStmtUtils.update(anchor, sql);
         return true;
     }
 
     public static boolean deleteIfExists(TS_SQLConnAnchor anchor, CharSequence tableName) {
         TS_SQLSanitizeUtils.sanitize(tableName);
-        var sql = TGS_StringUtils.concat("DROP TABLE IF EXISTS ", tableName);
+        var sql = TGS_StringUtils.cmn().concat("DROP TABLE IF EXISTS ", tableName);
         TS_SQLUpdateStmtUtils.update(anchor, sql);
         return true;
     }
