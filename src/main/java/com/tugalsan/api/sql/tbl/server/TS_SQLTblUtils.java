@@ -1,5 +1,7 @@
 package com.tugalsan.api.sql.tbl.server;
 
+import com.tugalsan.api.file.server.TS_DirectoryUtils;
+import com.tugalsan.api.file.server.TS_FileUtils;
 import java.util.*;
 import com.tugalsan.api.list.client.*;
 import com.tugalsan.api.log.server.*;
@@ -10,7 +12,9 @@ import com.tugalsan.api.sql.conn.server.*;
 import com.tugalsan.api.sql.sanitize.server.*;
 import com.tugalsan.api.sql.select.server.*;
 import com.tugalsan.api.sql.update.server.*;
+import com.tugalsan.api.stream.client.TGS_StreamUtils;
 import com.tugalsan.api.unsafe.client.*;
+import java.nio.file.Path;
 
 public class TS_SQLTblUtils {
 
@@ -82,9 +86,24 @@ public class TS_SQLTblUtils {
         return TS_SQLUpdateStmtUtils.update(anchor, sql).affectedRowCount == 1;
     }
 
-    public static List<String> names(TS_SQLConnAnchor anchor) {
+    public static List<String> names(TS_SQLConnAnchor anchor, Path optionalMysqlData) {
         var dbName = anchor.config.dbName;
         TS_SQLSanitizeUtils.sanitize(dbName);
+        if (optionalMysqlData != null) {
+            var dir = optionalMysqlData.resolve(dbName);
+            if (TS_DirectoryUtils.isExistDirectory(dir)) {
+                var subFiles = TS_DirectoryUtils.subFiles(dir, "*.frm", false, false);
+                if (subFiles.isEmpty()) {
+                    d.ce("names", "WARNING: using optionalMysqlData.dbName no file detected!", "skipped", dir);
+                } else {
+                    return TGS_StreamUtils.toLst(
+                            subFiles.stream().map(p -> TS_FileUtils.getNameLabel(p))
+                    );
+                }
+            } else {
+                d.ce("names", "WARNING: optionalMysqlData.dbName not exists!", "skipped", dir);
+            }
+        }
         TGS_Tuple1<List<String>> pack = new TGS_Tuple1();
         var sql = TGS_StringUtils.cmn().concat("SELECT TABLE_NAME FROM information_schema.tables WHERE table_type='BASE TABLE' AND table_schema='", dbName, "' ORDER BY table_schema");
         TS_SQLSelectStmtUtils.select(anchor, sql, rs -> pack.value0 = rs.strArr.get("TABLE_NAME"));
