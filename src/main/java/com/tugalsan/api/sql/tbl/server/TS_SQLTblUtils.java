@@ -24,10 +24,10 @@ public class TS_SQLTblUtils {
     public static void setIndexes(TS_SQLConnAnchor anchor, String tn, List<String> searchableColNames) {
         var curIndexes = getIndexes(anchor, tn);
         curIndexes.stream()
-                .filter(nm -> searchableColNames.stream().filter(nm2 -> Objects.equals(nm, nm2)).findAny().isEmpty())
+                .filter(nm -> searchableColNames.stream().noneMatch(nm2 -> Objects.equals(nm, nm2)))
                 .forEach(nm -> removeIndex(anchor, tn, nm));
         searchableColNames.stream()
-                .filter(nm -> curIndexes.stream().filter(nm2 -> Objects.equals(nm, nm2)).findAny().isEmpty())
+                .filter(nm -> curIndexes.stream().noneMatch(nm2 -> Objects.equals(nm, nm2)))
                 .forEach(nm -> addIndex(anchor, tn, nm));
     }
 
@@ -72,7 +72,7 @@ public class TS_SQLTblUtils {
 
     public static void addIndex(TS_SQLConnAnchor anchor, CharSequence tableName, CharSequence idxColName) {
         d.ci("addIndex", tableName, idxColName);
-        if (getIndexes(anchor, tableName).stream().filter(nm -> Objects.equals(nm, idxColName)).findAny().isPresent()) {
+        if (getIndexes(anchor, tableName).stream().anyMatch(nm -> Objects.equals(nm, idxColName))) {
             d.ce("addIndex", "index already exists", idxColName);
             return;
         }
