@@ -2,7 +2,7 @@ package com.tugalsan.api.sql.tbl.server;
 
 import com.tugalsan.api.file.server.TS_DirectoryUtils;
 import com.tugalsan.api.file.server.TS_FileUtils;
-import com.tugalsan.api.function.client.maythrow.checkedexceptions.TGS_FuncMTCEUtils;
+import com.tugalsan.api.function.client.maythrowexceptions.checked.TGS_FuncMTCUtils;
 import java.util.*;
 import com.tugalsan.api.list.client.*;
 import com.tugalsan.api.log.server.*;
@@ -118,7 +118,7 @@ public class TS_SQLTblUtils {
         TGS_Tuple1<Long> pack = new TGS_Tuple1();
         var sql = TGS_StringUtils.cmn().concat("SELECT COUNT(*) FROM information_schema.tables WHERE table_name = ? AND TABLE_SCHEMA = ? LIMIT 1");
         TS_SQLSelectStmtUtils.select(anchor, sql, ps -> {
-            TGS_FuncMTCEUtils.run(() -> {
+            TGS_FuncMTCUtils.run(() -> {
                 ps.setString(1, tableName.toString());
                 ps.setString(2, dbName);
             });
