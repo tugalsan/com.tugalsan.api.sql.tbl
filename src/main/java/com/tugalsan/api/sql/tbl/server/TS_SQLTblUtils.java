@@ -1,19 +1,18 @@
 package com.tugalsan.api.sql.tbl.server;
 
-import com.tugalsan.api.file.server.TS_DirectoryUtils;
-import com.tugalsan.api.file.server.TS_FileUtils;
-import com.tugalsan.api.function.client.maythrowexceptions.checked.TGS_FuncMTCUtils;
+import module com.tugalsan.api.file;
+import module com.tugalsan.api.function;
+import module com.tugalsan.api.log;
+import module com.tugalsan.api.list;
+import module com.tugalsan.api.tuple;
+import module com.tugalsan.api.stream;
+import module com.tugalsan.api.string;
+import module com.tugalsan.api.sql.col.typed;
+import module com.tugalsan.api.sql.conn;
+import module com.tugalsan.api.sql.sanitize;
+import module com.tugalsan.api.sql.select;
+import module com.tugalsan.api.sql.update;
 import java.util.*;
-import com.tugalsan.api.list.client.*;
-import com.tugalsan.api.log.server.*;
-import com.tugalsan.api.tuple.client.*;
-import com.tugalsan.api.string.client.*;
-import com.tugalsan.api.sql.col.typed.client.*;
-import com.tugalsan.api.sql.conn.server.*;
-import com.tugalsan.api.sql.sanitize.server.*;
-import com.tugalsan.api.sql.select.server.*;
-import com.tugalsan.api.sql.update.server.*;
-import com.tugalsan.api.stream.client.TGS_StreamUtils;
 
 import java.nio.file.Path;
 
