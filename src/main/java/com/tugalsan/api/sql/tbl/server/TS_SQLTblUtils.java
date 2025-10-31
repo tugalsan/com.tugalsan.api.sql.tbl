@@ -43,13 +43,18 @@ public class TS_SQLTblUtils {
     }
 
     public static TS_SQLConnStmtUpdateResult removeIndex(TS_SQLConnAnchor anchor, CharSequence tableName, CharSequence indexName) {
-        d.ci("removeIndex", tableName, indexName);
-        if (Objects.equals(indexName, "PRIMARY")) {
-            d.ci("addIndex", "cannot remove index", indexName);
+        return TGS_FuncMTUUtils.call(() -> {
+            d.ci("removeIndex", tableName, indexName);
+            if (Objects.equals(indexName, "PRIMARY")) {
+                d.ci("addIndex", "cannot remove index", indexName);
+                return TS_SQLConnStmtUpdateResult.of(0, null);
+            }
+            var sql = "DROP INDEX " + indexName + " ON " + tableName;
+            return TS_SQLUpdateStmtUtils.update(anchor, sql);
+        }, e -> {
+            d.ce("removeIndex", e.getMessage());
             return TS_SQLConnStmtUpdateResult.of(0, null);
-        }
-        var sql = "DROP INDEX " + indexName + " ON " + tableName;
-        return TS_SQLUpdateStmtUtils.update(anchor, sql);
+        });
     }
 
     public static List<String> getIndexes(TS_SQLConnAnchor anchor, CharSequence tableName) {
